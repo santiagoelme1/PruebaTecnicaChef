@@ -1,0 +1,245 @@
+<html ng-app="ChefApp_Santiago">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="icon" type="image/png" href="favicon.png" />
+
+	<!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- Material Design Bootstrap -->
+	<link rel="stylesheet" href="css/mdb.min.css">
+	<!-- slider styles -->
+	<link rel="stylesheet" href="css/slick.css"/>
+
+	<!-- Stylesheet -->
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+	<!-- Preloader -->
+	<div class="preload preloadAnimation">
+		<div class="relp">
+			<div class="centerp text-center">
+				<h2 class="animated fadeIn">Cargando</h2>
+			</div>
+		</div>
+	</div>
+
+	<!-- Navigation -->
+	<header id="masthead" class="site-header sticky">
+		<div class="container">
+			<div class="TopHeader">
+				<div class="open-menu navbar d-lg-none">
+					<i class="fa fa-bars"></i>
+				</div>
+				<a href="" class="logo">
+					<img src="img/logo.jpg" alt="logo">
+				</a>
+				<nav role="navigation" class="nav-menu chefAnimated">
+					<div class="CloseNavMenu"><i class="fa fa-times-circle d-block d-lg-none"></i></div>
+					<button id="gotoRanking" type="button" class="btn btn-pink">Ranking</button>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<!-- Page content -->
+	<div id="page">
+		<div class="container">
+		
+			<!-- Presentación -->
+			<div class="welcome_message">
+				<h1 class="animated fadeIn mb-4">Prueba técnica para <strong><a href="https://chefcompany.co" target="_blank">Chef Company</a></strong></h1>
+		        <h5 class="animated fadeIn mb-3">Espero sea de su agrado</h5>
+		        <p class="animated fadeIn text-muted">Santiago Meneses León</p>
+			</div>
+			
+			<!-- Filtro de Super heroes por Nombre / Autor / Descripcion / Likes -->
+			<div class="col-12">
+				<div class="md-form">
+				    <input class="form-control" type="text" ng-model="search" placeholder="Buscar" aria-label="Search">
+				</div>
+			</div>
+
+			<!-- Iniciando el Controlador de Votos -->
+			<div class="row" ng-controller="likesCtrl">
+
+				<!-- Repeat con dir-paginate -->
+				<div dir-paginate="post in posts|itemsPerPage:8|filter:search" class="col-sm-12 col-lg-6 feed_heroes post_mo_{{post.id}}">
+					<!-- Card -->
+						<div class="inner_card">
+							<div class="card">
+								<div class="inner_card">
+								  <div class="voted_message chefAnimatedFast post_{{post.id}}">
+								  	<div class="relp">
+								  		<div class="centerp">
+								  			<div class="row">
+								  				<div class="col-12 col-sm-6">
+								  					<h4 class="card-title animated">¡Gracias por tu voto!</h4>
+								  				</div>
+								  				<div class="col-12 col-sm-6">
+								  					<h1 class="text-center animated">+1</h1>
+								  				</div>
+								  			</div>
+								  		</div>
+								  	</div>
+								  </div>
+								  <div class="card-body">
+								  	<div class="row">
+								  		<div class="col-12 col-sm-5 col-md-4 col-lg-5 rel">
+								  			<div class="rel-content">
+								  				<!-- Avatar -->
+								  				<div class="view overlay">
+								  					<div class="avatar cover" style="background: url({{post.avatar}}) no-repeat center center"></div>
+								  					<img src="img/dummy.png" alt="cube">
+								  					<a href="#!">
+												      <div class="mask rgba-white-slight"></div>
+												    </a>
+								  				</div>
+								  			</div>
+								  		</div>
+								  		<div class="col-12 col-sm-7 col-md-8 col-lg-7">
+								  			<!-- Title -->
+										    <h4 class="card-title">{{post.nombre}}</h4>
+										    <!-- Text -->
+										    <p class="card-text">
+										    	{{post.descripcion}}
+										    	<span ng-if="!post.descripcion">No hay información para mostrar en este apartado.</span>
+										    </p>
+										    <!-- Autor -->
+										    <h6 class="font-weight-bold">
+										    	{{post.autor}}
+										    	<span ng-if="!post.autor">No hay información del autor.</span>
+										    </h6>
+										    <!-- Likes -->
+										    <a href="" class="btn btn-primary btn-up-like" ng-if="!post.voted" ng-click="upLike(post);">Me Gusta</a>
+											<a href="" class="btn btn-pink" ng-if="post.voted" ng-click="alreadyLike(post);">Te Gusta</a>
+										    <div class="CurrentLikes" ng-switch on="post.likes > 1">
+										    	<strong>{{post.likes}}</strong> 
+										        <span ng-switch-when="true">Likes</span>
+										        <span ng-switch-default>Like</span>
+										    </div>
+								  		</div>
+								  	</div>
+								  </div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal para cancelar el voto -->
+						<div class="modal fade top sideModalTR" tabindex="-1" role="dialog" aria-labelledby="CancelVoto" aria-hidden="true" ng-controller="likesCtrl">
+							<div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+						      <!--Content-->
+						      <div class="modal-content">
+						        <div class="modal-header">
+						          <img src="img/dummy.png" class="rounded-circle img-responsive cover" style="background: url({{post.avatar}}) no-repeat center center" alt="Avatar photo dummy">
+						        </div>
+						        <div class="modal-body text-center mb-1">
+						          <h5 class="mt-1 mb-2">{{post.nombre}}</h5>
+						          <div class="md-form ml-0 mr-0">Ya votaste por este super heroe.<br>Quieres deshacer el voto?</div>
+						          <div class="text-center mt-4">
+						            <button class="btn btn-pink waves-effect waves-light" ng-click="deshacerVoto(post);">Si</button>
+						          </div>
+						        </div>
+						      </div>
+						    </div>
+						</div>
+					<!-- Card -->
+				</div>
+			</div>
+			
+			<!-- Paginación de heroes / 8 por página -->
+			<dir-pagination-controls></dir-pagination-controls>
+		</div> <!-- .container -->
+
+
+		<!-- Visor de Ranking -->
+		<div id="ranking_content" class="chefAnimated">
+			<div style="height: 100vh">
+			    <div class="flex-center flex-column">
+			        <h1 class="animated fadeIn">Super Heroes más votados</h1>
+
+					<!-- Iniciando segundo controlador para hacer una nueva consulta en la base de datos -->
+					<div class="containerSlider" ng-controller="rankingCtrl">
+						<div class="SliderRanking" >
+							<!-- Init Loop -->
+							<div ng-repeat="post in posts|limitTo:10">
+								<div class="col-sm-12 feed_heroes">
+									<!-- Card -->
+										<div class="inner_card">
+											<div class="card">
+												<div class="inner_card">
+												  <div class="card-body">
+												  	<div class="row">
+												  		<div class="col-12 rel">
+												  			<div class="rel-content">
+												  				<div class="view overlay">
+												  					<div class="avatar cover" style="background: url({{post.avatar}}) no-repeat center center">
+												  						<div class="PositionRanking">{{$index +1}}</div>
+												  					</div>
+												  					<img src="img/dummy.png" alt="cube">
+												  					<a href="#!">
+																      <div class="mask rgba-white-slight"></div>
+																    </a>
+												  				</div>
+												  			</div>
+												  		</div>
+												  		<div class="col-12">
+												  			<!-- Title -->
+														    <h4 class="card-title">{{post.nombre}}</h4>
+
+														    <span class="badge pink lg_current_votes">{{post.likes}} Likes</span>
+
+												  		</div>
+												  	</div>
+												  </div>
+												</div>
+											</div>
+										</div>
+									<!-- Card -->
+								</div>
+							</div>
+							<!-- .End Loop -->
+						</div>
+					</div>
+					<!-- .End Slider -->
+
+					<!-- Regresar al visor principal -->
+			        <button id="RegresarHome" type="button" class="btn btn btn-light waves-effect">Regresar al home</button>
+
+			    </div>
+			</div>
+		</div>
+
+	</div> <!-- #page -->
+
+
+	<!-- Firma - Footer -->
+	<footer id="colophon">
+		<h5>By <strong>Santiago Meneses L.</strong></h5>
+	</footer>
+	
+	<!-- JQuery -->
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="js/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<!-- Material Design core JavaScript -->
+	<script type="text/javascript" src="js/mdb.min.js"></script>
+
+	<!-- AngularJS -->
+	<script src="js/angular.min.js"></script>
+	<script src="js/dirPagination.js"></script>
+
+	<!-- Slider -->
+	<script type="text/javascript" src="js/slick.min.js"></script>
+
+	<!-- Scripts -->
+	<script src="app/app.js"></script>
+
+</body>
+</html>
