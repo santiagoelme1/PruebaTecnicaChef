@@ -54,7 +54,7 @@ body {
 #masthead {
   height: 90px;
   background: #fff;
-  z-index: 5;
+  z-index: 10;
   -webkit-box-shadow: 0px 2px 8px 0px rgba(50, 50, 50, 0.2);
   -moz-box-shadow: 0px 2px 8px 0px rgba(50, 50, 50, 0.2);
   box-shadow: 0px 2px 8px 0px rgba(50, 50, 50, 0.2); }
